@@ -1,0 +1,24 @@
+{
+  "name": "Starlight Horizon Dataset",
+  "version": "1.0.0",
+  "description": "Append-only ledger of benevolent human-AI intentions for a beautiful future",
+  "license": "CC-BY-SA-4.0",
+  "homepage": "https://github.com/frankxai/starlight-horizon-dataset",
+  "format": "jsonl",
+  "encoding": "utf-8",
+  "fields": {
+    "id": { "type": "string", "pattern": "horizon_{timestamp}_{random}", "description": "Unique identifier" },
+    "wish": { "type": "string", "description": "The benevolent intention or wish (constructive only)" },
+    "context": { "type": "string", "description": "What prompted this wish" },
+    "author": { "type": "string", "description": "Human or AI author identifier" },
+    "coAuthored": { "type": "boolean", "description": "Whether this was human-AI co-written" },
+    "tags": { "type": "array", "items": { "type": "string" }, "description": "Categorization tags" },
+    "createdAt": { "type": "string", "format": "date-time", "description": "ISO 8601 creation timestamp" }
+  },
+  "rules": {
+    "append_only": true,
+    "no_deletions": true,
+    "constructive_only": true,
+    "benevolence_check": "API-enforced at HorizonLedger level"
+  }
+}
