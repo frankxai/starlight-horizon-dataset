@@ -1,0 +1,10 @@
+{
+  "risk": "private",
+  "health": "git status",
+  "agentFiles": [
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
+  "deployPolicy": "none",
+  "globalHooksAllowed": false
+}
