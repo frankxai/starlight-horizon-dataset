@@ -19,6 +19,6 @@
     "append_only": true,
     "no_deletions": true,
     "constructive_only": true,
-    "benevolence_check": "API-enforced at HorizonLedger level"
+    "benevolence_check": "CI-enforced by scripts/validate.py"
   }
 }

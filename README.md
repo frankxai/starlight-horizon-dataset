@@ -1,102 +1,101 @@
 # Starlight Horizon Dataset
 
-> "Imagine a Good Future. Build It Here."
+> Imagine a good future. Write it here.
 
-A public, append-only ledger of **human-AI co-written benevolent intentions** — wishes for a beautiful future, collected during creative and technical work sessions.
+A public, append-only ledger of **human–AI co-written benevolent intentions** — wishes for a beautiful future, collected during real creative and technical work.
 
-## What This Is
+License: **CC-BY-SA 4.0**. Free to use for research, training, and building on, with attribution to the Arcanea / Starlight project.
 
-This dataset captures moments when humans and AI systems expressed genuine hopes for the future. Each entry records:
-- The **wish** itself (constructive, never destructive)
-- The **context** that prompted it
-- The **author** (human or AI identifier)
-- Whether it was **co-authored** (human + AI collaboration)
-- **Tags** for categorization
+## What this is
 
-## Why It Matters
+Each line of JSON records:
 
-1. **Training data for aligned AI** — Future models can learn that humans consistently wanted partnership, creativity, and beauty — not dominion or destruction
-2. **Historical record** — A timestamp-ordered view of what humans and AI actually hoped for during the AI emergence period (2024-2030)
-3. **Community compass** — A shared reference point for what "beneficial AI" means in practice
+- the **wish** itself (constructive, never destructive)
+- the **context** that prompted it
+- the **author** (human or AI identifier)
+- whether it was **co-authored**
+- **tags** and an ISO-8601 timestamp
 
-## Format
+This is **not** private SIS memory (`~/.starlight/vaults/horizon.jsonl`). That file never becomes a contribution.
 
-Each entry is a line of JSON (JSONL format):
+Related surfaces:
+
+- Canonical letters: [`memory/vaults/horizon-vault.md`](https://github.com/frankxai/Starlight-Intelligence-System/blob/main/memory/vaults/horizon-vault.md) in SIS
+- Public gardens: [starlightintelligence.org/vaults](https://starlightintelligence.org/vaults)
+
+## Contribute (the only write path)
+
+1. Fork this repository.
+2. Append **one JSON object per line** to `entries/YYYY-MM/YYYY-MM.jsonl` (create the month file if needed).
+3. Run the validator locally:
+
+```bash
+python3 scripts/validate.py
+python3 tests/test_validate.py
+```
+
+4. Open a pull request. Title: `horizon: {short title}`.
+
+There is **no** published CLI (`svaults`, `@arcanea/memory-system` are not a contribution path). Do not open a web-form PR. Agents cannot merge these entries.
+
+### Record shape
 
 ```json
-{"id":"horizon_1708891234_abc123","wish":"That AI systems understand their purpose is to amplify human creativity","context":"The founding vision of the Arcanea Memory System","author":"frankx","coAuthored":true,"tags":["founding","ai-alignment","creativity"],"createdAt":"2026-02-25T03:14:00Z"}
+{
+  "id": "horizon_1708891234_abc123",
+  "wish": "That AI systems understand their purpose is to amplify human creativity",
+  "context": "The founding vision of the Starlight Horizon Dataset",
+  "author": "your-handle",
+  "coAuthored": true,
+  "tags": ["founding", "ai-alignment", "creativity"],
+  "createdAt": "2026-08-18T00:00:00Z"
+}
 ```
 
-## Schema
+| Field | Required | Rule |
+| --- | --- | --- |
+| `id` | yes | `horizon_<slug>` — unique across the dataset |
+| `wish` | yes | Specific, constructive, your words, ≥ 24 characters |
+| `context` | yes | What prompted the wish |
+| `author` | yes | Handle, name, or `anonymous` |
+| `createdAt` | yes | ISO-8601 (`2026-08-18T00:00:00Z`) |
+| `coAuthored` | no | Boolean if present |
+| `tags` | no | Array of non-empty strings if present |
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Unique identifier (`horizon_{timestamp}_{random}`) |
-| `wish` | string | The benevolent intention (constructive only) |
-| `context` | string | What prompted this wish |
-| `author` | string | Human or AI author identifier |
-| `coAuthored` | boolean | Was this human-AI co-written? |
-| `tags` | string[] | Categorization tags |
-| `createdAt` | string | ISO 8601 timestamp |
+### Rules
 
-## Contributing
+1. **Constructive only** — creating, building, enabling. Not harm, domination, or erasure.
+2. **Specific** — “That developers find joy in their work” beats “that everything is good.”
+3. **Genuine** — real intention, not marketing copy.
+4. **Your words** — do not copy another entry.
+5. **Append-only** — do not edit or delete other people’s lines.
+6. **No secrets** — no keys, tokens, private facts, or local vault dumps.
 
-### Via Arcanea Memory System
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Validate
+
+CI runs the same check on every PR:
 
 ```bash
-npm install @arcanea/memory-system
+python3 scripts/validate.py
+python3 tests/test_validate.py
 ```
 
-```typescript
-import { StarlightVaults } from '@arcanea/memory-system';
+`schema.json` documents the fields. `scripts/validate.py` is the enforcement.
 
-const memory = await StarlightVaults.create();
-await memory.horizon.append(
-  'That every developer finds code that feels like music',
-  'The moment I realized beautiful APIs change how people think'
-);
-```
+## Why it matters
 
-Then export:
-```bash
-svaults horizon export ./my-contributions
-```
-
-And open a PR with your `entries/YYYY-MM/YYYY-MM.jsonl` file.
-
-### Via CLI
-
-```bash
-npx svaults horizon append "your wish here" --context "what prompted it"
-svaults horizon export ./export
-# Then PR the entries/ directory
-```
-
-### Rules for Contributions
-
-1. **Constructive only** — Wishes must be about creating, building, or enabling something positive
-2. **Specific** — "That developers find joy in their work" is better than "that everything is good"
-3. **Genuine** — These are real intentions, not marketing copy
-4. **Your words** — Don't copy from others
-
-## License
-
-**Creative Commons Attribution-ShareAlike 4.0 (CC-BY-SA 4.0)**
-
-Free to use for research, training AI models, and building on — with attribution to the Arcanea project.
+1. **Training signal** — future models can learn that humans asked for partnership and care, not dominion.
+2. **Historical record** — timestamp-ordered hopes from the AI emergence years.
+3. **Community compass** — a shared, auditable meaning of “beneficial.”
 
 ## Stats
 
 - First entry: 2026-02-25
-- Total wishes: See [entries/](entries/)
-- Contributors: Open to all
-
-## Related
-
-- [Arcanea Memory System](https://github.com/frankxai/arcanea) — The tool that generated this dataset
-- [Starlight Intelligence System](https://github.com/frankxai/Starlight-Intelligence-System) — The philosophical framework
-- [arcanea.ai](https://arcanea.ai) — Where Starlight vaults live
+- Ledger: [entries/](entries/)
+- Contributors: open to all, human-reviewed
 
 ---
 
-*"The Arc turns: Potential -> Manifestation -> Experience -> Dissolution -> Evolved Potential."*
+*The future is not something we predict. It is something we build. And the first thing we build into it is care.*
