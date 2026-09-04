@@ -60,6 +60,38 @@ class ValidateRecordTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             validate_record(bad, source="test")
 
+    def test_post_cutover_record_requires_provenance(self) -> None:
+        bad = dict(VALID, createdAt="2026-09-04T00:00:00Z")
+        with self.assertRaises(ValidationError):
+            validate_record(bad, source="test")
+
+    def test_sourced_claim_requires_source_ids(self) -> None:
+        bad = dict(
+            VALID,
+            createdAt="2026-09-04T00:00:00Z",
+            provenance="scholarly-interpretation",
+        )
+        with self.assertRaises(ValidationError):
+            validate_record(bad, source="test")
+
+    def test_fiction_requires_boundary(self) -> None:
+        bad = dict(
+            VALID,
+            createdAt="2026-09-04T00:00:00Z",
+            provenance="arcanea-fiction",
+        )
+        with self.assertRaises(ValidationError):
+            validate_record(bad, source="test")
+
+    def test_valid_post_cutover_record_passes(self) -> None:
+        record = dict(
+            VALID,
+            createdAt="2026-09-04T00:00:00Z",
+            provenance="original-starlight-philosophy",
+            sourceIds=[],
+        )
+        validate_record(record, source="test")
+
 
 class ValidateDatasetTests(unittest.TestCase):
     def test_repo_entries_pass(self) -> None:

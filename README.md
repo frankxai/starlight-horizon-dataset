@@ -20,7 +20,8 @@ This is **not** private SIS memory (`~/.starlight/vaults/horizon.jsonl`). That f
 
 Related surfaces:
 
-- Canonical letters: [`memory/vaults/horizon-vault.md`](https://github.com/frankxai/Starlight-Intelligence-System/blob/main/memory/vaults/horizon-vault.md) in SIS
+- Starlight worldview and long-form text authority: `frankxai/starlight-canon`
+- SIS Horizon Vault: an operational legacy/public-values surface, not worldview canon
 - Public gardens: [starlightintelligence.org/vaults](https://starlightintelligence.org/vaults)
 
 ## Contribute (the only write path)
@@ -60,6 +61,9 @@ There is **no** published CLI (`svaults`, `@arcanea/memory-system` are not a con
 | `author` | yes | Handle, name, or `anonymous` |
 | `createdAt` | yes | ISO-8601 (`2026-08-18T00:00:00Z`) |
 | `coAuthored` | no | Boolean if present |
+| `provenance` | yes for records dated 2026-09-04 onward | Claim class from the canonical provenance vocabulary |
+| `sourceIds` | conditional | Required for historical or scholarly claims |
+| `fictionBoundary` | conditional | Required for literary/mythic or Arcanea fiction |
 | `tags` | no | Array of non-empty strings if present |
 
 ### Rules
@@ -70,6 +74,8 @@ There is **no** published CLI (`svaults`, `@arcanea/memory-system` are not a con
 4. **Your words** — do not copy another entry.
 5. **Append-only** — do not edit or delete other people’s lines.
 6. **No secrets** — no keys, tokens, private facts, or local vault dumps.
+7. **Name the register** — new records carry provenance; sourced claims cite sources, and fiction declares its boundary.
+8. **No ontology collapse** — Starlight is not God, The Source, or Lumina; traditions are not flattened; quantum physics is not doctrinal proof.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 

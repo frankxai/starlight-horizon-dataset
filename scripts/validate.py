@@ -31,6 +31,23 @@ ISO = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$"
 )
 ID_OK = re.compile(r"^horizon_[A-Za-z0-9_-]+$")
+PROVENANCE_CUTOVER = datetime.fromisoformat("2026-09-04T00:00:00+00:00")
+PROVENANCE = {
+    "historical-source-claim",
+    "scholarly-interpretation",
+    "starlight-interpretation",
+    "original-starlight-philosophy",
+    "original-literary-mythic-material",
+    "arcanea-fiction",
+}
+SOURCED = {"historical-source-claim", "scholarly-interpretation"}
+FICTIONAL = {"original-literary-mythic-material", "arcanea-fiction"}
+ONTOLOGY_DRIFT = re.compile(
+    r"\b(Starlight is (?:God|The Source|Lumina)|Lumina is Starlight|"
+    r"Shinkami is God|The Tao is The Source|all religions teach Starlight|"
+    r"Kunlun was actually Arcanea|quantum physics proves (?:manifestation|spiritual doctrine))\b",
+    re.IGNORECASE,
+)
 
 
 class ValidationError(ValueError):
@@ -75,9 +92,27 @@ def validate_record(record: dict, source: str = "record") -> None:
     if not ISO.match(created):
         raise ValidationError(f"{source}: createdAt must be ISO-8601 (got {created!r})")
     try:
-        datetime.fromisoformat(created.replace("Z", "+00:00"))
+        created_dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
     except ValueError as exc:
         raise ValidationError(f"{source}: createdAt not parseable") from exc
+
+    combined_text = f"{wish} {record.get('context', '')}"
+    if ONTOLOGY_DRIFT.search(combined_text):
+        raise ValidationError(f"{source}: ontology/provenance boundary violation")
+
+    provenance = record.get("provenance")
+    if created_dt >= PROVENANCE_CUTOVER and provenance not in PROVENANCE:
+        raise ValidationError(f"{source}: provenance is required for post-cutover records")
+    if provenance is not None and provenance not in PROVENANCE:
+        raise ValidationError(f"{source}: unknown provenance class {provenance!r}")
+    if provenance in SOURCED:
+        source_ids = record.get("sourceIds")
+        if not isinstance(source_ids, list) or not source_ids or not all(
+            isinstance(item, str) and item.strip() for item in source_ids
+        ):
+            raise ValidationError(f"{source}: sourced claims require non-empty sourceIds")
+    if provenance in FICTIONAL:
+        _nonempty_str(record, "fictionBoundary", source)
 
     if "coAuthored" in record and not isinstance(record["coAuthored"], bool):
         raise ValidationError(f"{source}: coAuthored must be a boolean")
