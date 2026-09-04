@@ -1,24 +1,75 @@
 {
   "name": "Starlight Horizon Dataset",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Append-only ledger of benevolent human-AI intentions for a beautiful future",
   "license": "CC-BY-SA-4.0",
   "homepage": "https://github.com/frankxai/starlight-horizon-dataset",
   "format": "jsonl",
   "encoding": "utf-8",
   "fields": {
-    "id": { "type": "string", "pattern": "horizon_{timestamp}_{random}", "description": "Unique identifier" },
-    "wish": { "type": "string", "description": "The benevolent intention or wish (constructive only)" },
-    "context": { "type": "string", "description": "What prompted this wish" },
-    "author": { "type": "string", "description": "Human or AI author identifier" },
-    "coAuthored": { "type": "boolean", "description": "Whether this was human-AI co-written" },
-    "tags": { "type": "array", "items": { "type": "string" }, "description": "Categorization tags" },
-    "createdAt": { "type": "string", "format": "date-time", "description": "ISO 8601 creation timestamp" }
+    "id": {
+      "type": "string",
+      "pattern": "horizon_{timestamp}_{random}",
+      "description": "Unique identifier"
+    },
+    "wish": {
+      "type": "string",
+      "description": "The benevolent intention or wish (constructive only)"
+    },
+    "context": {
+      "type": "string",
+      "description": "What prompted this wish"
+    },
+    "author": {
+      "type": "string",
+      "description": "Human or AI author identifier"
+    },
+    "coAuthored": {
+      "type": "boolean",
+      "description": "Whether this was human-AI co-written"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Categorization tags"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 creation timestamp"
+    },
+    "provenance": {
+      "type": "string",
+      "enum": [
+        "historical-source-claim",
+        "scholarly-interpretation",
+        "starlight-interpretation",
+        "original-starlight-philosophy",
+        "original-literary-mythic-material",
+        "arcanea-fiction"
+      ],
+      "description": "Epistemic and creative register; required for records dated 2026-09-04 onward"
+    },
+    "sourceIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Source-ledger IDs; required for historical and scholarly claims"
+    },
+    "fictionBoundary": {
+      "type": "string",
+      "description": "Explicit fiction label; required for literary/mythic and Arcanea fiction"
+    }
   },
   "rules": {
     "append_only": true,
     "no_deletions": true,
     "constructive_only": true,
-    "benevolence_check": "CI-enforced by scripts/validate.py"
+    "benevolence_check": "CI-enforced by scripts/validate.py",
+    "provenance_cutover": "2026-09-04T00:00:00Z",
+    "canon_authority": "frankxai/starlight-canon"
   }
 }
